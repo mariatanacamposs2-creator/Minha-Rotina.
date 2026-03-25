@@ -2,189 +2,161 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minha Rotina Rosa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Minha Rotina Premium</title>
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#ff85a1">
     
-    <link rel="apple-touch-icon" href="https://img.icons8.com/fluency/96/checked-checkbox.png">
-    <link rel="icon" href="https://img.icons8.com/fluency/96/checked-checkbox.png">
+    <link rel="apple-touch-icon" href="https://img.icons8.com/fluency/96/calendar.png">
+    <link rel="icon" href="https://img.icons8.com/fluency/96/calendar.png">
 
     <style>
         :root {
-            --pink-bg: #fff0f3;
-            --pink-card: #ffffff;
-            --pink-accent: #ff85a1;
+            --bg-gradient: linear-gradient(135deg, #fff0f3 0%, #ffc1cf 100%);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --pink-main: #ff85a1;
             --pink-dark: #f06292;
-            --text-main: #4a4a4a;
+            --text-color: #4a4a4a;
+        }
+
+        /* Suporte ao Modo Escuro Automático */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-gradient: linear-gradient(135deg, #2d1b20 0%, #1a0f12 100%);
+                --glass-bg: rgba(45, 27, 32, 0.85);
+                --text-color: #ffe0e6;
+            }
         }
 
         body { 
-            font-family: 'Segoe UI', Roboto, sans-serif; 
-            background-color: var(--pink-bg); 
-            color: var(--text-main);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            padding: 20px;
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background: var(--bg-gradient); 
+            background-attachment: fixed;
+            margin: 0; min-height: 100vh;
+            display: flex; justify-content: center; padding: 20px;
+        }
+
+        /* Barra de Progresso no Topo */
+        #progress-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 6px;
+            background: rgba(255,255,255,0.3); z-index: 1000;
+        }
+        #progress-bar {
+            height: 100%; width: 0%; background: var(--pink-dark);
+            box-shadow: 0 0 10px var(--pink-main); transition: width 0.4s ease;
         }
 
         .container { 
-            background: var(--pink-card); 
-            padding: 25px; 
-            border-radius: 25px; 
-            box-shadow: 0 10px 30px rgba(240, 98, 146, 0.15); 
-            width: 100%; 
-            max-width: 400px; 
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 25px; border-radius: 30px; 
+            width: 100%; max-width: 400px; margin-top: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
-        h2 { 
-            text-align: center; 
-            color: var(--pink-dark); 
-            margin-bottom: 5px;
-            font-size: 1.5rem;
-        }
-
-        .date-display { 
-            text-align: center; 
-            font-size: 0.85em; 
-            color: var(--pink-accent); 
-            margin-bottom: 20px; 
-            font-weight: bold;
-        }
-
-        .lista-tarefas {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
+        h2 { text-align: center; color: var(--pink-dark); margin: 0; font-size: 1.6rem; }
+        .stats-text { text-align: center; font-size: 0.85em; color: var(--pink-main); margin-bottom: 20px; font-weight: 600; }
 
         .item { 
-            display: flex; 
-            align-items: center; 
-            padding: 14px 10px; 
-            border-bottom: 1px solid #fff5f7;
-            transition: background 0.2s;
+            display: flex; align-items: center; padding: 15px; 
+            background: rgba(255,255,255,0.2); border-radius: 15px;
+            margin-bottom: 10px; transition: all 0.3s ease;
         }
 
-        .time { 
-            font-weight: bold; 
-            color: var(--pink-accent); 
-            width: 65px; 
-            font-size: 0.85em;
+        /* Animação ao marcar */
+        .item.checked-item {
+            transform: scale(0.96); opacity: 0.7; background: rgba(255,255,255,0.05);
         }
 
-        .task-text { 
-            flex-grow: 1; 
-            margin-left: 10px; 
-            font-size: 1rem; 
-        }
+        .time { font-weight: 800; color: var(--pink-dark); width: 60px; font-size: 0.8em; }
+        
+        .task-text { flex-grow: 1; margin: 0 15px; transition: 0.3s; color: var(--text-color); }
+        .done { text-decoration: line-through; color: #888; }
 
         .checkbox-custom {
-            width: 24px;
-            height: 24px;
-            accent-color: var(--pink-dark);
-            cursor: pointer;
-            border-radius: 6px;
+            width: 26px; height: 26px; accent-color: var(--pink-dark);
+            cursor: pointer; transform: scale(1.2);
         }
 
-        .done { 
-            text-decoration: line-through; 
-            color: #d1d1d1; 
-        }
-
-        .footer { 
-            text-align: center; 
-            font-size: 0.75em; 
-            margin-top: 25px; 
-            color: var(--pink-accent);
-            line-height: 1.6;
-        }
-
-        /* Estilo para o celular */
-        .celular-note {
-            background: #fff5f7;
-            padding: 8px;
-            border-radius: 10px;
-            margin-top: 10px;
-            font-weight: bold;
-        }
+        .footer { text-align: center; font-size: 0.75em; color: var(--pink-main); margin-top: 20px; opacity: 0.8; }
     </style>
 </head>
 <body>
 
+<div id="progress-container"><div id="progress-bar"></div></div>
+
 <div class="container">
     <h2>🌸 Minha Rotina</h2>
-    <div id="data-hoje" class="date-display"></div>
+    <p id="stats" class="stats-text">Carregando progresso...</p>
     
-    <div id="lista" class="lista-tarefas">
-        </div>
+    <div id="lista"></div>
     
     <div class="footer">
-        Os checks resetam automaticamente à meia-noite!<br>
-        <div class="celular-note">📱 Celular: 10 min a qualquer hora</div>
+        ✨ Design Moderno v2.0 ✨<br>
+        Reseta automaticamente à meia-noite
     </div>
 </div>
 
 <script>
     const rotina = [
-        { h: "06:00", t: "Oração + Leitura Bíblica" },
-        { h: "06:19", t: "500ml de Água" },
+        { h: "06:00", t: "Oração + Bíblia" },
+        { h: "06:19", t: "Água (500ml)" },
         { h: "06:20", t: "Caminhada" },
         { h: "07:10", t: "Skin Care" },
         { h: "07:20", t: "Tomar Café" },
         { h: "08:00", t: "Arrumar a Casa" },
         { h: "12:00", t: "Almoço" },
         { h: "13:00", t: "Soneca" },
-        { h: "14:00", t: "Estudo" },
-        { h: "15:00", t: "Hobby" },
-        { h: "15:00", t: "Fazer alguma coisa" },
+        { h: "14:00", t: "Estudos" },
         { h: "16:00", t: "Lanche" },
         { h: "18:00", t: "Fazer Janta" },
-        { h: "19:00", t: "Arrumar / Ir pra igreja" }
+        { h: "19:00", t: "Igreja / Arrumar" }
     ];
 
-    function verificarEAtualizar() {
-        const dataHoje = new Date().toLocaleDateString('pt-BR');
-        const ultimaData = localStorage.getItem('app_rotina_data');
-
-        // Se o dia mudou, limpa todos os checks
-        if (ultimaData !== dataHoje) {
-            rotina.forEach((_, i) => localStorage.removeItem(`task_check_${i}`));
-            localStorage.setItem('app_rotina_data', dataHoje);
+    function verificarData() {
+        const hoje = new Date().toLocaleDateString();
+        if (localStorage.getItem('data_app') !== hoje) {
+            rotina.forEach((_, i) => localStorage.removeItem('tarefa_'+i));
+            localStorage.setItem('data_app', hoje);
         }
-        
-        document.getElementById('data-hoje').innerText = dataHoje;
         renderizar();
     }
 
     function renderizar() {
         const listaEl = document.getElementById('lista');
+        let concluidas = 0;
         listaEl.innerHTML = '';
-        
-        rotina.forEach((item, index) => {
-            const isChecked = localStorage.getItem(`task_check_${index}`) === 'true';
-            
+
+        rotina.forEach((item, i) => {
+            const feito = localStorage.getItem('tarefa_'+i) === 'true';
+            if(feito) concluidas++;
+
             listaEl.innerHTML += `
-                <div class="item">
+                <div class="item ${feito ? 'checked-item' : ''}">
                     <span class="time">${item.h}</span>
-                    <span class="task-text ${isChecked ? 'done' : ''}">${item.t}</span>
-                    <input type="checkbox" class="checkbox-custom" 
-                        ${isChecked ? 'checked' : ''} 
-                        onclick="alternar(${index})">
-                </div>
-            `;
+                    <span class="task-text ${feito ? 'done' : ''}">${item.t}</span>
+                    <input type="checkbox" class="checkbox-custom" ${feito ? 'checked' : ''} onclick="toggle(${i})">
+                </div>`;
         });
+
+        // Atualiza Barra e Texto de Progresso
+        const porc = Math.round((concluidas / rotina.length) * 100);
+        document.getElementById('progress-bar').style.width = porc + '%';
+        document.getElementById('stats').innerText = `Você já completou ${porc}% da rotina! 🌸`;
     }
 
-    function alternar(index) {
-        const key = `task_check_${index}`;
-        const atual = localStorage.getItem(key) === 'true';
-        localStorage.setItem(key, !atual);
+    function toggle(i) {
+        const atual = localStorage.getItem('tarefa_'+i) === 'true';
+        localStorage.setItem('tarefa_'+i, !atual);
         renderizar();
     }
 
-    // Inicializa o app
-    verificarEAtualizar();
+    verificarData();
 </script>
-
 </body>
 </html>
