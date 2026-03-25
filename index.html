@@ -6,8 +6,7 @@
     <title>Minha Rotina Rosa</title>
     
     <link rel="apple-touch-icon" href="https://img.icons8.com/color/96/pink-check.png">
-<link rel="icon" href="https://img.icons8.com/color/96/pink-check.png">
-
+    <link rel="icon" href="https://img.icons8.com/color/96/pink-check.png">
 
     <style>
         :root {
@@ -52,18 +51,11 @@
             font-weight: bold;
         }
 
-        .lista-tarefas {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
         .item { 
             display: flex; 
             align-items: center; 
             padding: 14px 10px; 
             border-bottom: 1px solid #fff5f7;
-            transition: background 0.2s;
         }
 
         .time { 
@@ -84,7 +76,6 @@
             height: 24px;
             accent-color: var(--pink-dark);
             cursor: pointer;
-            border-radius: 6px;
         }
 
         .done { 
@@ -100,7 +91,6 @@
             line-height: 1.6;
         }
 
-        /* Estilo para o celular */
         .celular-note {
             background: #fff5f7;
             padding: 8px;
@@ -116,7 +106,7 @@
     <h2>🌸 Minha Rotina</h2>
     <div id="data-hoje" class="date-display"></div>
     
-    <div id="lista" class="lista-tarefas">
+    <div id="lista">
         </div>
     
     <div class="footer">
@@ -147,7 +137,6 @@
         const dataHoje = new Date().toLocaleDateString('pt-BR');
         const ultimaData = localStorage.getItem('app_rotina_data');
 
-        // Se o dia mudou, limpa todos os checks
         if (ultimaData !== dataHoje) {
             rotina.forEach((_, i) => localStorage.removeItem(`task_check_${i}`));
             localStorage.setItem('app_rotina_data', dataHoje);
@@ -183,10 +172,8 @@
         renderizar();
     }
 
-    // Inicializa o app
     verificarEAtualizar();
 </script>
 
 </body>
 </html>
-   
