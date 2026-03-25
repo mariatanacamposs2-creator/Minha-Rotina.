@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minha Rotina Rosa</title>
     
-    <link rel="apple-touch-icon" href="https://img.icons8.com/color/96/pink-check.png">
-    <link rel="icon" href="https://img.icons8.com/color/96/pink-check.png">
+    <link rel="apple-touch-icon" href="https://img.icons8.com/fluency/96/checked-checkbox.png">
+    <link rel="icon" href="https://img.icons8.com/fluency/96/checked-checkbox.png">
 
     <style>
         :root {
@@ -34,6 +34,160 @@
             box-shadow: 0 10px 30px rgba(240, 98, 146, 0.15); 
             width: 100%; 
             max-width: 400px; 
+        }
+
+        h2 { 
+            text-align: center; 
+            color: var(--pink-dark); 
+            margin-bottom: 5px;
+            font-size: 1.5rem;
+        }
+
+        .date-display { 
+            text-align: center; 
+            font-size: 0.85em; 
+            color: var(--pink-accent); 
+            margin-bottom: 20px; 
+            font-weight: bold;
+        }
+
+        .lista-tarefas {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .item { 
+            display: flex; 
+            align-items: center; 
+            padding: 14px 10px; 
+            border-bottom: 1px solid #fff5f7;
+            transition: background 0.2s;
+        }
+
+        .time { 
+            font-weight: bold; 
+            color: var(--pink-accent); 
+            width: 65px; 
+            font-size: 0.85em;
+        }
+
+        .task-text { 
+            flex-grow: 1; 
+            margin-left: 10px; 
+            font-size: 1rem; 
+        }
+
+        .checkbox-custom {
+            width: 24px;
+            height: 24px;
+            accent-color: var(--pink-dark);
+            cursor: pointer;
+            border-radius: 6px;
+        }
+
+        .done { 
+            text-decoration: line-through; 
+            color: #d1d1d1; 
+        }
+
+        .footer { 
+            text-align: center; 
+            font-size: 0.75em; 
+            margin-top: 25px; 
+            color: var(--pink-accent);
+            line-height: 1.6;
+        }
+
+        /* Estilo para o celular */
+        .celular-note {
+            background: #fff5f7;
+            padding: 8px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🌸 Minha Rotina</h2>
+    <div id="data-hoje" class="date-display"></div>
+    
+    <div id="lista" class="lista-tarefas">
+        </div>
+    
+    <div class="footer">
+        Os checks resetam automaticamente à meia-noite!<br>
+        <div class="celular-note">📱 Celular: 10 min a qualquer hora</div>
+    </div>
+</div>
+
+<script>
+    const rotina = [
+        { h: "06:00", t: "Oração + Leitura Bíblica" },
+        { h: "06:19", t: "500ml de Água" },
+        { h: "06:20", t: "Caminhada" },
+        { h: "07:10", t: "Skin Care" },
+        { h: "07:20", t: "Tomar Café" },
+        { h: "08:00", t: "Arrumar a Casa" },
+        { h: "12:00", t: "Almoço" },
+        { h: "13:00", t: "Soneca" },
+        { h: "14:00", t: "Estudo" },
+        { h: "15:00", t: "Hobby" },
+        { h: "15:00", t: "Fazer alguma coisa" },
+        { h: "16:00", t: "Lanche" },
+        { h: "18:00", t: "Fazer Janta" },
+        { h: "19:00", t: "Arrumar / Ir pra igreja" }
+    ];
+
+    function verificarEAtualizar() {
+        const dataHoje = new Date().toLocaleDateString('pt-BR');
+        const ultimaData = localStorage.getItem('app_rotina_data');
+
+        // Se o dia mudou, limpa todos os checks
+        if (ultimaData !== dataHoje) {
+            rotina.forEach((_, i) => localStorage.removeItem(`task_check_${i}`));
+            localStorage.setItem('app_rotina_data', dataHoje);
+        }
+        
+        document.getElementById('data-hoje').innerText = dataHoje;
+        renderizar();
+    }
+
+    function renderizar() {
+        const listaEl = document.getElementById('lista');
+        listaEl.innerHTML = '';
+        
+        rotina.forEach((item, index) => {
+            const isChecked = localStorage.getItem(`task_check_${index}`) === 'true';
+            
+            listaEl.innerHTML += `
+                <div class="item">
+                    <span class="time">${item.h}</span>
+                    <span class="task-text ${isChecked ? 'done' : ''}">${item.t}</span>
+                    <input type="checkbox" class="checkbox-custom" 
+                        ${isChecked ? 'checked' : ''} 
+                        onclick="alternar(${index})">
+                </div>
+            `;
+        });
+    }
+
+    function alternar(index) {
+        const key = `task_check_${index}`;
+        const atual = localStorage.getItem(key) === 'true';
+        localStorage.setItem(key, !atual);
+        renderizar();
+    }
+
+    // Inicializa o app
+    verificarEAtualizar();
+</script>
+
+</body>
+</html>
         }
 
         h2 { 
