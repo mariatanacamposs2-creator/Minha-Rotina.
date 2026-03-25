@@ -1,15 +1,18 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minha Rotina Diária</title>
+    <title>Minha Rotina</title>
+    
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/4345/4345517.png">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/4345/4345517.png">
+
     <style>
         :root {
             --pink-light: #fff0f3;
             --pink-medium: #ff85a1;
             --pink-dark: #f06292;
-            --text-color: #4a4a4a;
         }
         body { 
             font-family: 'Segoe UI', sans-serif; 
@@ -22,20 +25,13 @@
             width: 100%; max-width: 450px; 
         }
         h2 { text-align: center; color: var(--pink-dark); margin-bottom: 5px; }
-        p.date-display { text-align: center; font-size: 0.9em; color: var(--pink-medium); margin-bottom: 20px; }
-        
-        .item { 
-            display: flex; align-items: center; padding: 12px; 
-            border-bottom: 1px solid #fff5f7;
-        }
+        .date-display { text-align: center; font-size: 0.9em; color: var(--pink-medium); margin-bottom: 20px; }
+        .item { display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #fff5f7; }
         .time { font-weight: bold; color: var(--pink-medium); width: 65px; font-size: 0.9em; }
-        .task-text { flex-grow: 1; margin-left: 10px; font-size: 1em; }
-        .checkbox-custom {
-            width: 22px; height: 22px; accent-color: var(--pink-dark); cursor: pointer;
-        }
+        .task-text { flex-grow: 1; margin-left: 10px; font-size: 1em; color: #4a4a4a; }
+        .checkbox-custom { width: 22px; height: 22px; accent-color: var(--pink-dark); cursor: pointer; }
         .done { text-decoration: line-through; color: #ccc; }
-        
-        .footer { text-align: center; font-size: 0.8em; margin-top: 20px; color: var(--pink-medium); line-height: 1.5; }
+        .footer { text-align: center; font-size: 0.8em; margin-top: 20px; color: var(--pink-medium); }
     </style>
 </head>
 <body>
@@ -44,11 +40,7 @@
     <h2>🌸 Minha Rotina</h2>
     <p id="data-hoje" class="date-display"></p>
     <div id="lista"></div>
-    
-    <div class="footer">
-        O check reseta automaticamente à meia-noite!<br>
-        📱 Celular: 10 min a qualquer hora.
-    </div>
+    <div class="footer">Reseta automaticamente à meia-noite!</div>
 </div>
 
 <script>
@@ -65,18 +57,14 @@
         { h: "15:00", t: "Hobby / Algo novo" },
         { h: "16:00", t: "Lanche" },
         { h: "18:00", t: "Fazer Janta" },
-        { h: "19:00", t: "Arrumar / Igreja" }
+        { h: "19:00", t: "Arrumar / Igreja" },
+        { h: "Livre", t: "Celular (10 min por vez)" }
     ];
 
-    // Função para verificar se o dia mudou e resetar
     function verificarNovoDia() {
         const hoje = new Date().toLocaleDateString();
-        const ultimaVezQueAbriu = localStorage.getItem('ultima_data');
-
-        if (ultimaVezQueAbriu !== hoje) {
-            // Se a data salvada for diferente de hoje, apaga os checks antigos
-            rotina.forEach((_, index) => localStorage.removeItem(`check-${index}`));
-            // Atualiza a nova data no "cérebro" do app
+        if (localStorage.getItem('ultima_data') !== hoje) {
+            rotina.forEach((_, i) => localStorage.removeItem(`check-${i}`));
             localStorage.setItem('ultima_data', hoje);
         }
         document.getElementById('data-hoje').innerText = hoje;
@@ -102,10 +90,9 @@
         renderizar();
     }
 
-    // Executa ao abrir o app
     verificarNovoDia();
     renderizar();
 </script>
-
 </body>
-  </html>
+</html>
+       
